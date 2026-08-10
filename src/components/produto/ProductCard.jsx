@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, Pencil, Trash2, Tag, ShoppingCart } from "lucide-react";
+import { Eye, Pencil, Trash2, Tag, ShoppingCart, Minus, Plus } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
 import { useCarrinho } from "../../context/CarrinhoContext";
@@ -8,12 +9,15 @@ import { ToastAlerta } from "../../utils/ToastAlert";
 export default function ProductCard({ produto, onDelete }) {
   const { isAutenticado } = useAuth();
   const { adicionarAoCarrinho } = useCarrinho();
+  const [quantidade, setQuantidade] = useState(1);
 
   const semEstoque = Number(produto.quantidade) <= 0;
+  const estoqueMax = Number(produto.quantidade) || 1;
 
   function handleAddToCart() {
-    adicionarAoCarrinho(produto);
+    adicionarAoCarrinho(produto, quantidade);
     ToastAlerta("Produto adicionado ao carrinho", "sucesso");
+    setQuantidade(1);
   }
 
   return (
@@ -57,8 +61,33 @@ export default function ProductCard({ produto, onDelete }) {
           </span>
         </div>
 
+        {/* Seletor de quantidade */}
+        {!semEstoque && (
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
+              disabled={quantidade <= 1}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Minus size={14} />
+            </button>
+
+            <span className="w-6 text-center font-semibold">{quantidade}</span>
+
+            <button
+              type="button"
+              onClick={() => setQuantidade((q) => Math.min(estoqueMax, q + 1))}
+              disabled={quantidade >= estoqueMax}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Plus size={14} />
+            </button>
+          </div>
+        )}
+
         {/* Botões */}
-        <div className="mt-6 flex gap-2">
+        <div className="mt-4 flex gap-2">
           <Link
             to={`/produtos/${produto.id}`}
             className="flex flex-1 items-center justify-center rounded-lg bg-blue-600 py-2 text-white transition hover:bg-blue-700"

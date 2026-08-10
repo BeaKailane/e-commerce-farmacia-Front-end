@@ -18,6 +18,7 @@ import DeletarCategoria from "../components/categoria/DeletarCategoria";
 import Carrinho from "../pages/carrinho/Carrinho";
 import Checkout from "../pages/checkout/Checkout";
 import PedidoConfirmado from "../pages/checkout/PedidoConfirmado";
+import Pagamento  from "../pages/Pagamento"
 
 export default function AppRoutes() {
   return (
@@ -82,6 +83,8 @@ export default function AppRoutes() {
           {/* Carrinho e finalização de compra — públicos, sem necessidade de login */}
           <Route path="/carrinho" element={<Carrinho />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/pagamento" element={<Pagamento />} />
+
           <Route path="/pedido-confirmado" element={<PedidoConfirmado />} />
         </Route>
       </Routes>
