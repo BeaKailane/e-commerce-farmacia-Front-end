@@ -11,6 +11,7 @@ export default function Checkout() {
   const [dados, setDados] = useState({
     nomeCompleto: "",
     email: "",
+    cpf: "",
     endereco: "",
     cidade: "",
     cep: "",
@@ -56,6 +57,7 @@ export default function Checkout() {
           name: dados.nomeCompleto,
           email: dados.email,
           cellphone: dados.telefone,
+          taxId: dados.cpf,
         },
       };
 
@@ -150,6 +152,21 @@ export default function Checkout() {
               value={dados.email}
               onChange={atualizarEstado}
               required
+              className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              CPF
+            </label>
+            <input
+              type="text"
+              name="cpf"
+              value={dados.cpf}
+              onChange={atualizarEstado}
+              required
+              placeholder="000.000.000-00"
               className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
             />
           </div>

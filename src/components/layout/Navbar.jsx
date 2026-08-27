@@ -57,25 +57,23 @@ export default function Navbar() {
           >
             Produtos
           </Link>
-
           {isAutenticado ? (
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 rounded-xl border p-2 text-gray-700 transition hover:bg-gray-100"
-              title="Sair"
+              className="flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-200"
             >
               <LogOut size={20} />
+              Sair
             </button>
           ) : (
             <Link
               to="/login"
-              className="flex items-center gap-2 rounded-xl border p-2 text-gray-700 transition hover:bg-gray-100"
-              title="Login"
+              className="flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
             >
               <LogIn size={20} />
+              Entrar
             </Link>
           )}
-
           <Link
             to="/carrinho"
             className="relative flex items-center gap-2 rounded-xl border p-2 text-gray-700 transition hover:bg-gray-100"

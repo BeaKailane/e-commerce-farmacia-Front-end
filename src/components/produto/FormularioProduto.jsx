@@ -43,28 +43,28 @@ export default function FormularioProduto() {
   }, [id, emEdicao]);
 
   function atualizarEstado(e) {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
 
-    if (name === "categoria") {
-      setProduto({
-        ...produto,
-        categoria: {
-          id: Number(value),
-        },
-      });
-      return;
-    }
-
-    setProduto({
-      ...produto,
-      [name]:
-        name === "quantidade"
-          ? Number(value)
-          : name === "preco"
-            ? parseFloat(value)
-            : value,
-    });
+  if (name === "categoria") {
+    setProduto((produtoAtual) => ({
+      ...produtoAtual,
+      categoria: {
+        id: Number(value),
+      },
+    }));
+    return;
   }
+
+  setProduto((produtoAtual) => ({
+    ...produtoAtual,
+    [name]:
+      name === "quantidade"
+        ? Number(value)
+        : name === "preco"
+          ? parseFloat(value)
+          : value,
+  }));
+}
 
   async function handleSalvar(e) {
     e.preventDefault();
@@ -212,7 +212,7 @@ export default function FormularioProduto() {
               id="foto"
               name="foto"
               type="url"
-              placeholder="https://exemplo.com/imagem.jpg"
+              placeholder="https://exemplo.com/imagem.jpg" 
               value={produto.foto}
               onChange={atualizarEstado}
               className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"

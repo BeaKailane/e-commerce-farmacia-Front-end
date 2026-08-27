@@ -20,6 +20,8 @@ import Checkout from "../pages/checkout/Checkout";
 import PedidoConfirmado from "../pages/checkout/PedidoConfirmado";
 import Pagamento  from "../pages/Pagamento"
 
+import PagamentoSucesso from "../pages/PagamentoSucesso";
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -84,6 +86,7 @@ export default function AppRoutes() {
           <Route path="/carrinho" element={<Carrinho />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pagamento" element={<Pagamento />} />
+          <Route path="/pagamento/sucesso" element={<PagamentoSucesso />} /> {/* novo */}
 
           <Route path="/pedido-confirmado" element={<PedidoConfirmado />} />
         </Route>
