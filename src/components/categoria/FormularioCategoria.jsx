@@ -24,7 +24,7 @@ export default function FormularioCategoria() {
       [e.target.name]: e.target.value,
     });
   }
-
+//função de cadastro de novas categorias
   async function cadastrar(e) {
     e.preventDefault();
     setIsLoading(true);
