@@ -18,7 +18,9 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: |
+        echo "VITE_API_URL configurada: $VITE_API_URL"
+        npx playwright test
       env:
         VITE_API_URL: ${{ secrets.VITE_API_URL }}
     - uses: actions/upload-artifact@v4
