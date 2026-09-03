@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Tag } from "lucide-react";
+import { ArrowLeft, Tag, Minus, Plus, ShoppingCart } from "lucide-react";
 
 import { buscar } from "../services/services";
+import { useAuth } from "../context/AuthContext";
+import { useCarrinho } from "../context/CarrinhoContext";
 import Loading from "../components/ui/Loading";
 import { ToastAlerta } from "../utils/ToastAlert";
 
 export default function ProdutoDetalhe() {
   const { id } = useParams();
+  const { isAutenticado } = useAuth();
+  const { adicionarAoCarrinho } = useCarrinho();
+
   const [produto, setProduto] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [quantidade, setQuantidade] = useState(1);
 
   useEffect(() => {
     setIsLoading(true);
@@ -31,6 +37,13 @@ export default function ProdutoDetalhe() {
         </Link>
       </div>
     );
+  }
+
+  const semEstoque = Number(produto.quantidade) <= 0;
+
+  function handleAddToCart() {
+    adicionarAoCarrinho(produto, quantidade);
+    ToastAlerta("Produto adicionado ao carrinho", "sucesso");
   }
 
   return (
@@ -70,17 +83,59 @@ export default function ProdutoDetalhe() {
             <span className="text-3xl font-bold text-red-600">
               R$ {Number(produto.preco).toFixed(2)}
             </span>
-            <span className="text-sm text-gray-500">
-              {produto.quantidade} em estoque
+            <span className={`text-sm ${semEstoque ? "text-red-600" : "text-gray-500"}`}>
+              {semEstoque ? "Esgotado" : `${produto.quantidade} em estoque`}
             </span>
           </div>
 
-          <Link
-            to={`/produtos/editar/${produto.id}`}
-            className="mt-8 inline-block rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700"
-          >
-            Editar produto
-          </Link>
+          {!semEstoque && (
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
+                disabled={quantidade <= 1}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Minus size={16} />
+              </button>
+
+              <span className="w-8 text-center text-lg font-semibold">
+                {quantidade}
+              </span>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setQuantidade((q) => Math.min(produto.quantidade, q + 1))
+                }
+                disabled={quantidade >= produto.quantidade}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+          )}
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={semEstoque}
+              className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+            >
+              <ShoppingCart size={20} />
+              Adicionar ao carrinho
+            </button>
+
+            {isAutenticado && (
+              <Link
+                to={`/produtos/editar/${produto.id}`}
+                className="inline-flex items-center rounded-xl border border-red-600 px-6 py-3 font-semibold text-red-600 transition hover:bg-red-50"
+              >
+                Editar produto
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>

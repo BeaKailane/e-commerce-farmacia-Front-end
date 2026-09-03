@@ -1,3 +1,4 @@
+//forms para  do produto
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -18,9 +19,12 @@ export default function FormularioProduto() {
     nome: "",
     descricao: "",
     marcaProduto: "",
-    quantidade: 0,
-    preco: 0,
-    categoria: { id: "" },
+    quantidade: "",
+    preco: "",
+    foto: "",
+    categoria: {
+      id: "",
+    },
   });
 
   const [categorias, setCategorias] = useState([]);
@@ -39,15 +43,28 @@ export default function FormularioProduto() {
   }, [id, emEdicao]);
 
   function atualizarEstado(e) {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
 
-    if (name === "categoria") {
-      setProduto({ ...produto, categoria: { id: value } });
-      return;
-    }
-
-    setProduto({ ...produto, [name]: value });
+  if (name === "categoria") {
+    setProduto((produtoAtual) => ({
+      ...produtoAtual,
+      categoria: {
+        id: Number(value),
+      },
+    }));
+    return;
   }
+
+  setProduto((produtoAtual) => ({
+    ...produtoAtual,
+    [name]:
+      name === "quantidade"
+        ? Number(value)
+        : name === "preco"
+          ? parseFloat(value)
+          : value,
+  }));
+}
 
   async function handleSalvar(e) {
     e.preventDefault();
@@ -55,7 +72,7 @@ export default function FormularioProduto() {
 
     try {
       if (emEdicao) {
-        await atualizarProduto(`/produtos/${id}`, produto);
+        await atualizarProduto(`/produtos/${produto.id}`, produto);
         ToastAlerta("Produto atualizado com sucesso", "sucesso");
       } else {
         await cadastrarProduto("/produtos", produto);
@@ -90,7 +107,10 @@ export default function FormularioProduto() {
 
         <div className="space-y-5">
           <div>
-            <label htmlFor="nome" className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="nome"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
               Nome
             </label>
             <input
@@ -105,7 +125,10 @@ export default function FormularioProduto() {
           </div>
 
           <div>
-            <label htmlFor="descricao" className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="descricao"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
               Descrição
             </label>
             <textarea
@@ -120,7 +143,10 @@ export default function FormularioProduto() {
           </div>
 
           <div>
-            <label htmlFor="marcaProduto" className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="marcaProduto"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
               Marca
             </label>
             <input
@@ -135,7 +161,10 @@ export default function FormularioProduto() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="quantidade" className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="quantidade"
+                className="mb-1.5 block text-sm font-medium text-gray-700"
+              >
                 Quantidade
               </label>
               <input
@@ -151,7 +180,10 @@ export default function FormularioProduto() {
             </div>
 
             <div>
-              <label htmlFor="preco" className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="preco"
+                className="mb-1.5 block text-sm font-medium text-gray-700"
+              >
                 Preço (R$)
               </label>
               <input
@@ -169,9 +201,41 @@ export default function FormularioProduto() {
           </div>
 
           <div>
-            <label htmlFor="categoria" className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="foto"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
+              URL da Imagem
+            </label>
+
+            <input
+              id="foto"
+              name="foto"
+              type="url"
+              placeholder="https://exemplo.com/imagem.jpg" 
+              value={produto.foto}
+              onChange={atualizarEstado}
+              className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+
+            {produto.foto && (
+              <img
+                src={produto.foto}
+                alt={produto.nome}
+                className="mt-4 h-56 w-full rounded-xl border object-cover"
+                onError={(e) => (e.target.style.display = "none")}
+              />
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="categoria"
+              className="mb-1.5 block text-sm font-medium text-gray-700"
+            >
               Categoria
             </label>
+
             <select
               id="categoria"
               name="categoria"
@@ -183,6 +247,7 @@ export default function FormularioProduto() {
               <option value="" disabled>
                 Selecione uma categoria
               </option>
+
               {categorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>
                   {categoria.nome}

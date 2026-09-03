@@ -1,8 +1,11 @@
 import { Pencil, Trash2, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../../context/AuthContext";
+
 export default function CardCategoria({ categoria }) {
   const { id, nome, descricao } = categoria;
+  const { isAutenticado } = useAuth();
 
   return (
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200">
@@ -24,27 +27,29 @@ export default function CardCategoria({ categoria }) {
           {descricao}
         </p>
 
-        <div className="flex justify-end gap-3 mt-6">
-          <Link
-            to={`/categorias/editar/${id}`}
-            className="bg-blue-100 p-2 rounded-lg hover:bg-blue-200 transition"
-          >
-            <Pencil
-              size={20}
-              className="text-blue-700"
-            />
-          </Link>
+        {isAutenticado && (
+          <div className="flex justify-end gap-3 mt-6">
+            <Link
+              to={`/categorias/editar/${id}`}
+              className="bg-blue-100 p-2 rounded-lg hover:bg-blue-200 transition"
+            >
+              <Pencil
+                size={20}
+                className="text-blue-700"
+              />
+            </Link>
 
-          <Link
-            to={`/categorias/deletar/${id}`}
-            className="bg-red-100 p-2 rounded-lg hover:bg-red-200 transition"
-          >
-            <Trash2
-              size={20}
-              className="text-red-600"
-            />
-          </Link>
-        </div>
+            <Link
+              to={`/categorias/deletar/${id}`}
+              className="bg-red-100 p-2 rounded-lg hover:bg-red-200 transition"
+            >
+              <Trash2
+                size={20}
+                className="text-red-600"
+              />
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -60,4 +60,4 @@ src/
 
 Beatriz Kailane
 
-GitHub: https://github.com/BeaKailane"# e-commerce-farmacia-Front-end" 
+GitHub: https://github.com/BeaKailane

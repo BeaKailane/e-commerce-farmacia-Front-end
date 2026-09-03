@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 
 import { buscar } from "../services/services";
+import { useAuth } from "../context/AuthContext";
 import CardCategoria from "../components/categoria/CardCategoria";
 import Loading from "../components/ui/Loading";
 import { ToastAlerta } from "../utils/ToastAlert";
 
 export default function Categorias() {
+  const { isAutenticado } = useAuth();
   const [categorias, setCategorias] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,13 +39,15 @@ export default function Categorias() {
           </p>
         </div>
 
-        <Link
-          to="/categorias/cadastrar"
-          className="flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700"
-        >
-          <Plus size={20} />
-          Nova Categoria
-        </Link>
+        {isAutenticado && (
+          <Link
+            to="/categorias/cadastrar"
+            className="flex items-center gap-2 rounded-xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700"
+          >
+            <Plus size={20} />
+            Nova Categoria
+          </Link>
+        )}
       </div>
 
       {/* Cards */}
