@@ -8,8 +8,6 @@ const api = axios.create({
 
 // Anexa o token salvo no login em todas as requisições,
 // para que as rotas de admin no back-end reconheçam o usuário autenticado.
-// Obs.: back-ends Spring costumam já devolver o token com "Bearer " incluso,
-// então evitamos duplicar o prefixo aqui.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
