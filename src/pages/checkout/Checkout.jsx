@@ -60,12 +60,15 @@ export default function Checkout() {
           taxId: dados.cpf,
         },
       };
-
-      const response = await fetch("http://localhost:8080/pagamentos/pix", {
-        method: "POST",
-        headers,
-        body: JSON.stringify(body),
-      });
+      
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/pagamentos/pix`,
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify(body),
+        },
+      );
 
       // Com o checkout liberado para visitantes, 401/403 só deve
       // acontecer se havia um token sendo usado e ele expirou/é inválido.
