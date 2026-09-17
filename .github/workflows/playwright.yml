@@ -17,6 +17,17 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Acordar backend no Render
+      run: |
+        for i in {1..15}; do
+          status=$(curl -s -o /dev/null -w "%{http_code}" https://e-commerce-farmacia-f13f.onrender.com/v3/api-docs)
+          if [ "$status" = "200" ]; then
+            echo "Backend acordado!"
+            break
+          fi
+          echo "Tentativa $i: backend ainda dormindo (status $status), aguardando..."
+          sleep 5
+        done
     - name: Run Playwright tests
       run: |
         echo "VITE_API_URL configurada: $VITE_API_URL"
