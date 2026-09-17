@@ -1,7 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  timeout: 200000, // 2min por teste
+  timeout: 200000,
+  expect: {
+    timeout: 30000, //tempode startar 
+  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
@@ -12,6 +15,6 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000, // 2min pra subir o servidor
+    timeout: 120000,
   },
 });
