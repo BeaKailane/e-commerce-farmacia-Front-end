@@ -10,7 +10,6 @@ test('Fluxo de pagamento via PIX', async ({ page }) => {
 
   // 2. Ir para produtos e adicionar um item ao carrinho
   await page.goto('http://localhost:5173/produtos');
-  // TODO: ajustar este seletor conforme o HTML real do botão
   await page.getByRole('button', { name: /adicionar ao carrinho/i }).first().click();
 
   // 3. Ir para o carrinho e finalizar compra
@@ -18,8 +17,7 @@ test('Fluxo de pagamento via PIX', async ({ page }) => {
   await page.getByRole('button', { name: /finalizar compra/i }).click();
   await expect(page).toHaveURL(/checkout/);
 
-  // 4. Preencher dados de entrega (selecionados por name, pois os labels
-  //    não têm htmlFor/id vinculado ao input)
+  // 4. Preencher dados de entrega
   await page.locator('input[name="nomeCompleto"]').fill('Cliente Teste');
   await page.locator('input[name="email"]').fill('cliente@teste.com');
   await page.locator('input[name="cpf"]').fill('507.545.610-38');
@@ -31,7 +29,14 @@ test('Fluxo de pagamento via PIX', async ({ page }) => {
   // 5. Confirmar pedido
   await page.getByRole('button', { name: /confirmar pedido/i }).click();
 
-  // 6. O checkout redireciona (window.location.href) para o AbacatePay
-  await page.waitForURL(/abacatepay\.com/, { timeout: 15000 });
-  await expect(page).toHaveURL(/abacatepay\.com/);
+  // Aguarda um pouco para o frontend processar a resposta
+  await page.waitForTimeout(5000);
+
+  // Mostra para onde o navegador realmente foi
+  console.log('URL após confirmar pedido:', page.url());
+
+  // 6. Verifica o redirecionamento
+  await expect(page).toHaveURL(/abacatepay\.com/, {
+    timeout: 15000
+  });
 });
