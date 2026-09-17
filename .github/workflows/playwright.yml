@@ -17,6 +17,12 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Validate API configuration
+      run: |
+        test -n "$VITE_API_URL" || { echo "VITE_API_URL não configurada"; exit 1; }
+        echo "VITE_API_URL configurada"
+      env:
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
     - name: Acordar backend no Render
       run: |
         for i in {1..15}; do
